@@ -62,6 +62,19 @@ tags:
       Entry point for processing a consent request redirected by the TppBankingApi
       over the FinTechApi to this ConsentAuthorisationApi.
 paths:
+  /callback/{auth-id}/{redirectState}:
+    get:
+      summary: Callback endpoint to retrieve authorization codes
+      operationId: receiveCallback
+      parameters:
+        - $ref: "#/components/parameters/auth-id"
+        - $ref: "#/components/parameters/redirectState"
+      responses:
+        "200":
+          $ref: "#/components/responses/200_AuthorizeResponse"
+        "401":
+          $ref: "#/components/responses/401_Unauthorized"
+
   /v1/consent/{auth-id}:
     get:
       operationId: authUsingGET
@@ -184,8 +197,6 @@ paths:
           $ref: "#/components/responses/200_AuthorizeResponse"
         "401":
           $ref: "#/components/responses/401_Unauthorized"
-      security:
-        - redirectCookie: []
 
   /v1/consent/{auth-id}/fromAspsp/{redirectState}/nok:
     get:

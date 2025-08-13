@@ -40,8 +40,8 @@ spring:
       # Prefix for OBG tables in database
       table-prefix: opb_
       # Sandbox URLs
-      adorsys-sandbox-url: http://localhost:20014
-      adorsys-sandbox-oauth-server-url: http://localhost:20015/oauth/authorization-server
+      adorsys-sandbox-url: https://xs2a-connector-modelbank.support.sol.adorsys.com
+      adorsys-sandbox-oauth-server-url: https://xs2a-online-modelbank.support.sol.adorsys.com
       adorsys-hbci-sandbox-url: http://localhost:8090/hbci-mock/
     # Which migrations types to apply (pre-load bank data into database)
     contexts: dev,mock-banks
@@ -276,7 +276,7 @@ protocol:
         # Consent related URLs that will be provided to ASPSP to get results of operation
         web-hooks:
           # URL that represents page saying that consent creation was OK (comes before consent result page) or acts as redirect-back URI for OAuth2
-          ok: ${protocol.xs2a.urls.common.web-hooks.ok}
+          ok: http://localhost:8085/callback/{authSessionId}/{aspspRedirectCode}
           # URL that represents page saying that consent creation was not OK (comes before consent result page)
           nok: ${protocol.xs2a.urls.common.web-hooks.nok}
           # URL that represents consent acquisition result

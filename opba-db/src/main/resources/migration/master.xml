@@ -28,4 +28,5 @@
     <include relativeToChangelogFile="true" file="migrations/0022-add-protocol-configuration.xml"/>
     <include relativeToChangelogFile="true" file="migrations/0023-change-unique-constraint.xml"/>
     <include relativeToChangelogFile="true" file="migrations/0024-add-consent-supplementary-key.xml"/>
+    <include relativeToChangelogFile="true" file="migrations/0025-create-table-session-for-aspsp.xml"/>
 </databaseChangeLog>
