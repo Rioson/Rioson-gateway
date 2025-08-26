@@ -1,10 +1,10 @@
 package de.adorsys.opba.protocol.xs2a.service.xs2a.dto;
 
-import com.google.common.net.MediaType;
 import de.adorsys.opba.protocol.api.dto.codes.FieldCode;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.ContextCode;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.FrontendCode;
 import de.adorsys.opba.protocol.xs2a.service.xs2a.annotations.ValidationInfo;
+import de.adorsys.xs2a.adapter.api.http.ContentType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static de.adorsys.opba.protocol.api.dto.codes.TypeCode.STRING;
+import static de.adorsys.xs2a.adapter.api.RequestHeaders.ACCEPT;
 import static de.adorsys.xs2a.adapter.api.RequestHeaders.AUTHORIZATION;
 import static de.adorsys.xs2a.adapter.api.RequestHeaders.CONTENT_TYPE;
 import static de.adorsys.xs2a.adapter.api.RequestHeaders.PSU_ID;
@@ -46,7 +47,10 @@ public class WithBasicInfo {
     private String requestId;
 
     @NotBlank
-    private String contentType = MediaType.JSON_UTF_8.type();
+    private String contentType = ContentType.APPLICATION_JSON;
+
+    @NotBlank
+    private String accept = ContentType.ALL;
 
     // TODO: Validation - it should be present only for OAuth2
     private String oauth2Token;
@@ -57,6 +61,7 @@ public class WithBasicInfo {
         allValues.put(X_GTW_ASPSP_ID, aspspId);
         allValues.put(X_REQUEST_ID, requestId);
         allValues.put(CONTENT_TYPE, contentType);
+        allValues.put(ACCEPT, accept);
 
         if (null != oauth2Token) {
             allValues.put(AUTHORIZATION, oauth2Token);
