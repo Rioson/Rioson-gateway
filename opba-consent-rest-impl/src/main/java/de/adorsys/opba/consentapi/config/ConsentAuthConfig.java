@@ -22,6 +22,15 @@ public class ConsentAuthConfig {
     @Bean
     @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
     public FacadeServiceableRequest provideCurrentFacadeServiceable(HttpServletRequest httpServletRequest) {
+
+        String path = httpServletRequest.getRequestURI();
+
+        if (path.contains("/callback")) {
+            return FacadeServiceableRequest.builder()
+                    .authorization("MY-SUPER-FINTECH-ID")
+                    .sessionPassword("qwerty")
+                    .build();
+        }
         return FacadeServiceableRequest.builder()
                 .authorizationKey(authorizationSessionKey.getKey())
                 .build();

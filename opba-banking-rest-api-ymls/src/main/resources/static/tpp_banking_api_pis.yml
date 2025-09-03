@@ -8,6 +8,41 @@ externalDocs:
   url: "https://adorsys.github.com/open-banking-gateway"
 
 paths:
+
+  /v1/banking/callback/{auth-id}/{redirectState}/ok:
+    get:
+      summary: Callback endpoint to retrieve authorization codes from the ASPSP and proceed with the registration of the payment (just in case you don't want to go with any mechanism from the consent-ui and his backend)
+      operationId: callBackSuccess
+      tags:
+        - Callback from ASPSP (without consent-ui)
+      parameters:
+        - $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/parameters/auth-id"
+        - $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/parameters/redirectState"
+      responses:
+        "200":
+          $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/responses/200_AuthorizeResponse"
+        "401":
+          $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/responses/401_Unauthorized"
+      security:
+        - redirectCookie: [ ]
+
+  /v1/banking/callback/{auth-id}/{redirectState}/nok:
+    get:
+      summary: Callback endpoint to retrieve authorization codes from the ASPSP after a payment failure at the ASPSP level (just in case you don't want to go with any mechanism from the consent-ui and his backend)
+      operationId: callBackFailure
+      tags:
+        - Callback from ASPSP (without consent-ui)
+      parameters:
+        - $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/parameters/auth-id"
+        - $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/parameters/redirectState"
+      responses:
+        "200":
+          $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/responses/200_AuthorizeResponse"
+        "401":
+          $ref: "../../../../../opba-consent-rest-api/src/main/resources/static/tpp_consent_api.yml#/components/responses/401_Unauthorized"
+      security:
+        - redirectCookie: [ ]
+
   /v1/banking/pis/payments/{payment-product}:
     post:
       summary: Payment initiation request

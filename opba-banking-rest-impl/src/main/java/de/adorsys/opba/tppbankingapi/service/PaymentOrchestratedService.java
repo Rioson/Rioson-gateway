@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import de.adorsys.opba.consentapi.controller.AuthStateConsentServiceController;
 import de.adorsys.opba.consentapi.controller.UpdateAuthConsentServiceController;
 import de.adorsys.opba.consentapi.service.mapper.AisExtrasMapper;
-import de.adorsys.opba.db.domain.entity.sessions.SessionFromAspsp;
-import de.adorsys.opba.db.repository.jpa.SessionRepository;
 import de.adorsys.opba.protocol.api.dto.context.UserAgentContext;
 import de.adorsys.opba.protocol.api.dto.parameters.ExtraRequestParam;
 import de.adorsys.opba.protocol.api.dto.request.FacadeServiceableRequest;
@@ -74,7 +72,7 @@ public class PaymentOrchestratedService {
     private final UpdateAuthConsentServiceController.UpdateAuthBodyToApiMapper updateAuthBodyToApiMapper;
     private final AuthStateConsentServiceController.AuthStateBodyToApiMapper authStateMapper;
     private final RedirectionOnlyToOkMapper redirectionOnlyToOkMapper;
-    private final SessionRepository sessionRepository;
+    private final SessionService sessionService;
 
     private static final Map<String, String> TRANSLATE_ACTIONS = ImmutableMap.of(
             "SINGLE_PAYMENT", "INITIATE_PAYMENT"
@@ -126,15 +124,7 @@ public class PaymentOrchestratedService {
         String newXsrfToken = (String) updateAuthorization(context).get();
         PaymentOrchestrationContext updatedContext = context.get().withRedirectCode(newXsrfToken);
 
-         CompletableFuture <ResponseEntity<?>> result = refreshAuthorizationStateAfterUpdate(updatedContext);
-         result.thenApply(responseEntity -> {
-            SessionFromAspsp session = new SessionFromAspsp();
-            session.setAuthId(responseEntity.getHeaders().getFirst("Authorization-Session-ID"));
-            session.setCookie(xRequestSignature);
-            sessionRepository.save(session);
-            return session;
-        });
-           return result;
+         return refreshAuthorizationStateAfterUpdate(updatedContext);
     }
 
     /**
@@ -164,6 +154,7 @@ public class PaymentOrchestratedService {
                     // Extract the session key from the PSU login response.
                     String sessionKey = Objects.requireNonNull(authHeaders.getHeaders().get("Set-Cookie"),
                             "Set-Cookie header missing from PSU login response");
+                    sessionService.saveSession(authId, sessionKey);
                     // Return a new context instance with all extracted and obtained auth details.
                     return context.withAuthDetails(authId, redirectCode, xsrfToken, sessionKey);
                 });

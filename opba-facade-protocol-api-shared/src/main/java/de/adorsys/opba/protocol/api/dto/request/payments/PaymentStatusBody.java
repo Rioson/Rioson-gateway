@@ -12,5 +12,6 @@ import java.time.OffsetDateTime;
 public class PaymentStatusBody implements ResultBody {
     private String externalResourceId;
     private String transactionStatus;
+    private String psuMessage;
     private OffsetDateTime createdAt;
 }
