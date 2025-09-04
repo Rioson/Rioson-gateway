@@ -116,7 +116,7 @@ public class TppBankingApiPisInfoController implements TppBankingApiPaymentStatu
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = Const.API_MAPPERS_PACKAGE)
     public interface PaymentInfoBodyToApiMapper extends FacadeResponseBodyToRestBodyMapper<PaymentInformationResponse, PaymentInfoBody> {
 
-        @Mapping(source = "facade.creditorAddress.city", target = "creditorAddress.townName")
+        @Mapping(source = "facade.creditorAddress.city", target = "creditorAddress.city")
         PaymentInformationResponse map(PaymentInfoBody facade);
     }
 

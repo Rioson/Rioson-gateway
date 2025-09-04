@@ -94,7 +94,7 @@ public class TppBankingApiPisController implements TppBankingApiSinglePaymentPis
 
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = API_MAPPERS_PACKAGE)
     public interface PaymentRestRequestBodyToSinglePaymentMapper {
-        @Mapping(source = "body.creditorAddress.townName", target = "creditorAddress.city")
+        @Mapping(source = "body.creditorAddress.city", target = "creditorAddress.city")
         SinglePaymentBody map(PaymentInitiation body, PaymentProductDetails paymentProduct);
     }
 
