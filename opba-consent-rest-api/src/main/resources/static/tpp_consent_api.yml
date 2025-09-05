@@ -635,7 +635,7 @@ components:
       properties:
         buildingNumber:
           type: string
-        townName:
+        city:
           type: string
         country:
           type: string
