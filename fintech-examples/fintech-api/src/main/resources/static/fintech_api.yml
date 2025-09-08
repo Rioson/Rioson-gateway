@@ -1203,7 +1203,7 @@ components:
         debitorIban:
           type: string
         amount:
-          type: BigDecimal
+          type: string
         purpose:
           type: string
         endToEndIdentification:
@@ -1534,8 +1534,8 @@ components:
           * 5768.2
           * -1.50
           * 5877.78
-      type: BigDecimal
-#      pattern: "^-?[0-9]+(\\.[0-9]{1,3})?$"
+      type: string
+      pattern: "^-?[0-9]+(\\.[0-9]{1,3})?$"
       example: "5877.78"
 
     bankTransactionCode:
