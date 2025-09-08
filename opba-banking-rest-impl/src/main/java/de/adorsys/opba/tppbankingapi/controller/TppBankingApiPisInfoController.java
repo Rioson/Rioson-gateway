@@ -21,6 +21,7 @@ import de.adorsys.opba.tppbankingapi.pis.model.generated.SessionStatusDetails;
 import de.adorsys.opba.tppbankingapi.pis.resource.generated.TppBankingApiPaymentStatusPisApi;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
@@ -115,6 +116,7 @@ public class TppBankingApiPisInfoController implements TppBankingApiPaymentStatu
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = Const.API_MAPPERS_PACKAGE)
     public interface PaymentInfoBodyToApiMapper extends FacadeResponseBodyToRestBodyMapper<PaymentInformationResponse, PaymentInfoBody> {
 
+        @Mapping(source = "facade.creditorAddress.city", target = "creditorAddress.townName")
         PaymentInformationResponse map(PaymentInfoBody facade);
     }
 

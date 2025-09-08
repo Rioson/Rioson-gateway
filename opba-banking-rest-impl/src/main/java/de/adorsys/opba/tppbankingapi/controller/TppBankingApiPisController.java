@@ -16,6 +16,7 @@ import de.adorsys.opba.tppbankingapi.pis.resource.generated.TppBankingApiSingleP
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.EnumMap;
@@ -93,6 +94,7 @@ public class TppBankingApiPisController implements TppBankingApiSinglePaymentPis
 
     @Mapper(componentModel = SPRING_KEYWORD, implementationPackage = API_MAPPERS_PACKAGE)
     public interface PaymentRestRequestBodyToSinglePaymentMapper {
+        @Mapping(source = "body.creditorAddress.townName", target = "creditorAddress.city")
         SinglePaymentBody map(PaymentInitiation body, PaymentProductDetails paymentProduct);
     }
 
