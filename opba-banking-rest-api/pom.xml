@@ -24,7 +24,7 @@
       <openapi-spec-file-location-tpp_bank_info_api>${ymldir}/tpp_banking_api_bank_info.yml</openapi-spec-file-location-tpp_bank_info_api>
       <openapi-spec-file-location-tpp_token_api>${ymldir}/tpp_banking_api_token.yml</openapi-spec-file-location-tpp_token_api>
       <openapi-spec-file-location-admin_api>${ymldir}/tpp_admin_api.yml</openapi-spec-file-location-admin_api>
-      <openapi-spec-file-location-banking-callback_api>${ymldir}/tpp_banking_api_callback_api.yml</openapi-spec-file-location-banking-callback_api>
+      <openapi-spec-file-location-banking-callback_api>${ymldir}/tpp_banking_api_callback.yml</openapi-spec-file-location-banking-callback_api>
 
   </properties>
 
