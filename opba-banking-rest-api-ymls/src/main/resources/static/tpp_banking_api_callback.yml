@@ -9,7 +9,7 @@ externalDocs:
 
 paths:
 
-  /v1/banking/callback/{auth-id}/{redirectState}/ok:
+  /v1/callback/{auth-id}/{redirectState}/ok:
     get:
       summary: Callback endpoint to retrieve authorization codes from the ASPSP and proceed with the registration of the payment (just in case you don't want to go with any mechanism from the consent-ui and his backend)
       operationId: callBackSuccess
@@ -26,7 +26,7 @@ paths:
       security:
         - redirectCookie: [ ]
 
-  /v1/banking/callback/{auth-id}/{redirectState}/nok:
+  /v1/callback/{auth-id}/{redirectState}/nok:
     get:
       summary: Callback endpoint to retrieve authorization codes from the ASPSP after a payment failure at the ASPSP level (just in case you don't want to go with any mechanism from the consent-ui and his backend)
       operationId: callBackFailure
