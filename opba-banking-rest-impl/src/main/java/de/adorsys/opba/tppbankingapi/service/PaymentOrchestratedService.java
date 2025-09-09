@@ -72,6 +72,7 @@ public class PaymentOrchestratedService {
     private final UpdateAuthConsentServiceController.UpdateAuthBodyToApiMapper updateAuthBodyToApiMapper;
     private final AuthStateConsentServiceController.AuthStateBodyToApiMapper authStateMapper;
     private final RedirectionOnlyToOkMapper redirectionOnlyToOkMapper;
+    private final SessionService sessionService;
 
     private static final Map<String, String> TRANSLATE_ACTIONS = ImmutableMap.of(
             "SINGLE_PAYMENT", "INITIATE_PAYMENT"
@@ -123,8 +124,7 @@ public class PaymentOrchestratedService {
         String newXsrfToken = (String) updateAuthorization(context).get();
         PaymentOrchestrationContext updatedContext = context.get().withRedirectCode(newXsrfToken);
 
-        return refreshAuthorizationStateAfterUpdate(updatedContext);
-
+         return refreshAuthorizationStateAfterUpdate(updatedContext);
     }
 
     /**
@@ -154,6 +154,7 @@ public class PaymentOrchestratedService {
                     // Extract the session key from the PSU login response.
                     String sessionKey = Objects.requireNonNull(authHeaders.getHeaders().get("Set-Cookie"),
                             "Set-Cookie header missing from PSU login response");
+                    sessionService.saveSession(authId, sessionKey);
                     // Return a new context instance with all extracted and obtained auth details.
                     return context.withAuthDetails(authId, redirectCode, xsrfToken, sessionKey);
                 });

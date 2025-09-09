@@ -2127,7 +2127,7 @@ components:
       type: object
       properties:
         balanceAmount:
-          $ref: "#/components/schemas/Amount"
+          $ref: "#/components/schemas/amount"
         balanceType:
           type: string
         iban:

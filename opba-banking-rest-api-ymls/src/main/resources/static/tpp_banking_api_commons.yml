@@ -593,7 +593,7 @@ components:
         {
           street: "rue blue",
           buildingnNumber: "89",
-          city: "Paris",
+          townName: "Paris",
           postalCode: "75000",
           country: "FR",
         }
