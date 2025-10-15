@@ -1,5 +1,6 @@
 package de.adorsys.opba.protocol.xs2a.service;
 
+import de.adorsys.opba.db.config.EnableBankingPersistence;
 import de.adorsys.opba.protocol.xs2a.BaseMockitoTest;
 import de.adorsys.opba.protocol.xs2a.EnableXs2aProtocol;
 import de.adorsys.opba.protocol.xs2a.TestProfiles;
@@ -10,8 +11,11 @@ import org.flowable.engine.RuntimeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.mockito.Mockito.doThrow;
@@ -51,6 +55,9 @@ class ContextUpdateServiceTest extends BaseMockitoTest {
 
     @EnableXs2aProtocol
     @SpringBootApplication
+    @EnableJpaRepositories(basePackages = "de.adorsys.opba.db.repository.jpa")
+    @EntityScan(basePackages = "de.adorsys.opba.db.domain")
+    @ComponentScan(basePackages = {"de.adorsys.opba.db", "de.adorsys.opba.protocol.xs2a"})
     public static class TestConfig {
     }
 }
