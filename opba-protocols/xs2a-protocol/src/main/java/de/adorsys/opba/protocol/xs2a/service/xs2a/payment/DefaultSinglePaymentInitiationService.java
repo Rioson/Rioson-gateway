@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.flowable.engine.delegate.DelegateExecution;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,6 +35,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@ComponentScan("de.adorsys.opba.db.repository")
 public class DefaultSinglePaymentInitiationService implements SinglePaymentInitiationService {
     private final Xs2aValidator validator;
     private final PaymentInitiationService pis;

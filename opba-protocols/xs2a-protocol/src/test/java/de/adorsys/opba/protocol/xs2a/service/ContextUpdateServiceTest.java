@@ -1,6 +1,8 @@
 package de.adorsys.opba.protocol.xs2a.service;
 
 import de.adorsys.opba.db.config.EnableBankingPersistence;
+import de.adorsys.opba.db.repository.BankProfileRepositoryImpl;
+import de.adorsys.opba.db.repository.jpa.BankProfileJpaRepository;
 import de.adorsys.opba.protocol.xs2a.BaseMockitoTest;
 import de.adorsys.opba.protocol.xs2a.EnableXs2aProtocol;
 import de.adorsys.opba.protocol.xs2a.TestProfiles;
@@ -14,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,8 +37,12 @@ class ContextUpdateServiceTest extends BaseMockitoTest {
     private ContextUpdateService updateService;
 
     @MockBean
+    private BankProfileJpaRepository bankProfileJpaRepository;
+
+    @MockBean
     @SuppressWarnings("PMD.UnusedPrivateField") // Injecting into Spring context
-    private AspspReadOnlyRepository aspspReadOnlyRepository;
+    private BankProfileRepositoryImpl bankProfileRepository;
+
 
     @Test
     void updateContextRetriesOnFlowableOptimisticLockingException() {
@@ -54,10 +61,7 @@ class ContextUpdateServiceTest extends BaseMockitoTest {
     }
 
     @EnableXs2aProtocol
-    @SpringBootApplication
-    @EnableJpaRepositories(basePackages = "de.adorsys.opba.db.repository.jpa")
-    @EntityScan(basePackages = "de.adorsys.opba.db.domain")
-    @ComponentScan(basePackages = {"de.adorsys.opba.db", "de.adorsys.opba.protocol.xs2a"})
+    @SpringBootApplication(scanBasePackages = "de.adorsys.opba")
     public static class TestConfig {
     }
 }
