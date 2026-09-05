@@ -1,13 +1,14 @@
-FROM maven:3.9-eclipse-temurin-21-alpine AS build
+FROM maven:3.9-eclipse-temurin-21-alpine
 
 WORKDIR /app
 
-# Copy everything and build
-COPY . .
-RUN mvn clean install -DskipTests -Pproduction
+COPY .mvn .mvn/
+COPY mvnw pom.xml ./
+RUN chmod +x mvnw
 
-# Runtime image
-FROM openjdk:21-jdk-slim
-COPY --from=build /app/target/*.war /app/app.war
+COPY src src/
+
+RUN ./mvnw clean install -DskipTests -Pproduction
+
 EXPOSE 8080
-CMD ["java", "-jar", "/app/app.war"]
+CMD ["java", "-jar", "target/*.war"]
