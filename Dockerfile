@@ -4,14 +4,25 @@ WORKDIR /app
 
 COPY . .
 
-# Build only the web module (replace with actual module name)
-RUN mvn clean install -DskipTests -Pproduction -pl server -am
+# List all pom.xml locations (this shows all modules)
+RUN echo "=== ALL MODULES ==="
+RUN find . -name "pom.xml" -exec dirname {} \;
 
-# Find the artifact in the module's target folder
-RUN find /app -path "*/target/*.war" -o -path "*/target/*.jar" | grep -v "maven-wrapper" > /tmp/artifact.txt
+# Build everything (no -pl)
+RUN mvn clean install -DskipTests -Pproduction
+
+# Find the artifact
+RUN find /app -name "*.war" -o -name "*.jar" | grep -v "maven-wrapper" > /tmp/artifact.txt
+RUN cat /tmp/artifact.txt || echo "NO ARTIFACT FOUND"
 
 EXPOSE 8080
 
-CMD sh -c 'ARTIFACT=$(cat /tmp/artifact.txt | head -1); \
-           echo "Starting: $ARTIFACT"; \
-           java -jar $ARTIFACT'
+CMD sh -c 'ARTIFACT=$(grep -v "maven-wrapper" /tmp/artifact.txt | head -1); \
+           if [ -z "$ARTIFACT" ]; then \
+               echo "NO ARTIFACT FOUND. AVAILABLE FILES:"; \
+               find /app -name "*.war" -o -name "*.jar" | grep -v "maven-wrapper"; \
+               tail -f /dev/null; \
+           else \
+               echo "Starting: $ARTIFACT"; \
+               java -jar $ARTIFACT; \
+           fi'
