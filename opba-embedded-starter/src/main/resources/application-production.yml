@@ -1,0 +1,61 @@
+# Production overrides. Every value below must be provided by the deployment secret/configuration system.
+server:
+  forward-headers-strategy: framework
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  liquibase:
+    enabled: true
+    contexts: production
+    parameters:
+      adorsys-sandbox-url: ${ASPSP_XS2A_BASE_URL}
+      adorsys-sandbox-oauth-server-url: ${ASPSP_XS2A_OAUTH_URL}
+      adorsys-hbci-sandbox-url: ${ASPSP_HBCI_BASE_URL}
+
+api:
+  banking:
+    admin-api:
+      security:
+        login: ${OBG_ADMIN_LOGIN}
+        password: ${OBG_ADMIN_PASSWORD}
+  security:
+    private-key: ${OBG_TPP_PRIVATE_KEY}
+    public-key: ${OBG_TPP_PUBLIC_KEY}
+  cookie:
+    secure: true
+    same-site: None
+
+facade:
+  urls:
+    embedded-ui-base-url: ${OBG_EMBEDDED_UI_BASE_URL}
+  encryption:
+    datasafe:
+      read-keystore:
+        psu: ${OBG_DATASAFE_PSU_PASSWORD}
+        fintech: ${OBG_DATASAFE_FINTECH_PASSWORD}
+        fintech-user: ${OBG_DATASAFE_FINTECH_USER_PASSWORD}
+
+protocol:
+  xs2a:
+    pkcs12:
+      keystore: ${OBG_QWAC_KEYSTORE}
+      password: ${OBG_QWAC_KEYSTORE_PASSWORD}
+  finapi:
+    api-url: ${FINAPI_API_URL:https://sandbox.finapi.io}
+    webform-api-url: ${FINAPI_WEBFORM_API_URL:https://webform-sandbox.finapi.io}
+    client-id: ${FINAPI_CLIENT_ID}
+    client-secret: ${FINAPI_CLIENT_SECRET}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never

@@ -80,6 +80,7 @@ The following picture displays the overall technical architecture concept of thi
 
  - [docker-compose-dev.yml](https://github.com/adorsys/open-banking-gateway/tree/develop/docker-compose-dev.yml) - docker-compose file in the project root for **Development** (requires building docker images)
  - [docker-compose.yml](https://github.com/adorsys/open-banking-gateway/tree/develop/docker-compose.yml) - docker-compose file in the project root for **Demo** (Images will be pulled from DockerHub)
+ - [Production deployment guide](docs/production-deployment.md) - production profile, secret contract, container build, and release gates
 
 ## Postman scripts to play with API 
 
@@ -126,6 +127,7 @@ Please take a look into our [**documentation**](https://adorsys.github.io/open-b
 * [Banking Protoсol Design](docs/architecture/technical-details.md)
 * [User Agent Redirection](docs/architecture/concepts/psu-device-redirection.md)
 * [PSU Access Security Design](docs/architecture/concepts/psu-security-concept.md)
+* [Production deployment guide](docs/production-deployment.md)
 * [JavaDoc](https://adorsys.github.io/open-banking-gateway/javadoc/latest/index.html)
 
 ## Third Parties Contribution

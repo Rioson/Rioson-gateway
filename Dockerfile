@@ -1,28 +1,26 @@
-FROM maven:3.9-eclipse-temurin-21-alpine
+# syntax=docker/dockerfile:1.7
 
+FROM eclipse-temurin:21-jdk-alpine AS build
+WORKDIR /workspace
+
+COPY .mvn/ .mvn/
+COPY . .
+RUN chmod +x mvnw
+RUN ./mvnw -B -ntp -pl opba-embedded-starter -am package -DskipTests \
+    && test -f opba-embedded-starter/target/open-banking-gateway-*-exec.jar
+
+FROM eclipse-temurin:21-jre-alpine AS runtime
+RUN addgroup -S opba && adduser -S -G opba opba
 WORKDIR /app
 
-COPY . .
+COPY --from=build /workspace/opba-embedded-starter/target/open-banking-gateway-*-exec.jar /app/open-banking-gateway.jar
+RUN chown -R opba:opba /app
 
-# List all pom.xml locations (this shows all modules)
-RUN echo "=== ALL MODULES ==="
-RUN find . -name "pom.xml" -exec dirname {} \;
+USER opba
+EXPOSE 8085
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75 -XX:+ExitOnOutOfMemoryError"
 
-# Build everything (no -pl)
-RUN mvn clean install -DskipTests -Pproduction
+HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=5 \
+  CMD wget --no-verbose --tries=1 --spider http://127.0.0.1:8085/actuator/health || exit 1
 
-# Find the artifact
-RUN find /app -name "*.war" -o -name "*.jar" | grep -v "maven-wrapper" > /tmp/artifact.txt
-RUN cat /tmp/artifact.txt || echo "NO ARTIFACT FOUND"
-
-EXPOSE 8080
-
-CMD sh -c 'ARTIFACT=$(grep -v "maven-wrapper" /tmp/artifact.txt | head -1); \
-           if [ -z "$ARTIFACT" ]; then \
-               echo "NO ARTIFACT FOUND. AVAILABLE FILES:"; \
-               find /app -name "*.war" -o -name "*.jar" | grep -v "maven-wrapper"; \
-               tail -f /dev/null; \
-           else \
-               echo "Starting: $ARTIFACT"; \
-               java -jar $ARTIFACT; \
-           fi'
+ENTRYPOINT ["java", "-jar", "/app/open-banking-gateway.jar"]
