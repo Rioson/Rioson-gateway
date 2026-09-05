@@ -1,0 +1,59 @@
+<main class="admin-shell">
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">OPEN BANKING GATEWAY</p>
+      <h1>Operations console</h1>
+      <p class="subtitle">Configure ASPSP connectivity, protocol profiles, and service availability.</p>
+    </div>
+    <button *ngIf="signedIn" class="button ghost" type="button" (click)="signOut()">Sign out</button>
+  </header>
+
+  <section *ngIf="!signedIn" class="login-card panel">
+    <div class="login-copy">
+      <span class="status-dot"></span>
+      <p class="eyebrow">RESTRICTED ACCESS</p>
+      <h2>Administrator sign-in</h2>
+      <p>Use the credentials configured for the gateway Admin API. Credentials are held in memory only and are never persisted by this console.</p>
+    </div>
+    <form (ngSubmit)="signIn()" class="login-form">
+      <label>Admin username<input [(ngModel)]="username" name="username" autocomplete="username" required /></label>
+      <label>Admin password<input [(ngModel)]="password" name="password" type="password" autocomplete="current-password" required /></label>
+      <button class="button primary" type="submit" [disabled]="loading">{{ loading ? 'Connecting…' : 'Connect to gateway' }}</button>
+    </form>
+  </section>
+
+  <ng-container *ngIf="signedIn">
+    <section class="metrics">
+      <article class="metric panel"><span>Configured banks</span><strong>{{ banks.length }}</strong><small>Loaded from Admin API</small></article>
+      <article class="metric panel"><span>Gateway status</span><strong class="healthy">Online</strong><small>Authenticated control plane</small></article>
+      <article class="metric panel"><span>Change safety</span><strong>Protected</strong><small>Explicit save and delete actions</small></article>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel bank-list">
+        <div class="section-heading"><div><p class="eyebrow">ASPSP DIRECTORY</p><h2>Bank profiles</h2></div><button class="button small" type="button" (click)="newBank()">+ Add bank</button></div>
+        <button *ngFor="let bank of banks" class="bank-row" [class.active]="selected?.bank?.uuid === bank.uuid" type="button" (click)="inspect(bank)">
+          <span class="bank-mark">{{ (bank.name || '?').slice(0, 1) }}</span>
+          <span class="bank-copy"><strong>{{ bank.name || 'Unnamed bank' }}</strong><small>{{ bank.bic || bank.bankCode || 'No identifier' }}</small></span>
+          <span class="pill" [class.offline]="!bank.isActive">{{ bank.isActive ? 'Active' : 'Inactive' }}</span>
+        </button>
+        <p *ngIf="!banks.length" class="empty">No bank configurations returned.</p>
+      </aside>
+
+      <section class="panel detail" *ngIf="selected; else welcome">
+        <div class="section-heading"><div><p class="eyebrow">CONFIGURATION DETAIL</p><h2>{{ selected.bank.name || 'New bank' }}</h2></div><div class="actions"><button class="button ghost" *ngIf="!editing" type="button" (click)="editSelected()">Edit</button><button class="button danger" *ngIf="!editing" type="button" (click)="deleteSelected()">Delete</button><button class="button primary" *ngIf="editing" type="button" (click)="saveSelected()">Save changes</button></div></div>
+        <div class="form-grid" [class.readonly]="!editing">
+          <label>Bank name<input [(ngModel)]="selected.bank.name" [disabled]="!editing" /></label>
+          <label>Bank UUID<input [(ngModel)]="selected.bank.uuid" [disabled]="!editing" /></label>
+          <label>BIC<input [(ngModel)]="selected.bank.bic" [disabled]="!editing" /></label>
+          <label>Bank code<input [(ngModel)]="selected.bank.bankCode" [disabled]="!editing" /></label>
+          <label class="toggle"><input type="checkbox" [(ngModel)]="selected.bank.isActive" [disabled]="!editing" /> Accept traffic for this bank</label>
+        </div>
+        <div class="profile-section"><div class="section-heading compact"><div><p class="eyebrow">PROTOCOL PROFILE</p><h3>{{ selectedProfile?.adapterId || 'No profile selected' }}</h3></div><span class="pill" *ngIf="selectedProfile">{{ selectedProfile.isSandbox ? 'Sandbox' : 'Production' }}</span></div><div class="form-grid" *ngIf="selectedProfile"><label>Adapter ID<input [(ngModel)]="selectedProfile.adapterId" [disabled]="!editing" /></label><label>Protocol type<input [(ngModel)]="selectedProfile.protocolType" [disabled]="!editing" /></label><label>Base URL<input [(ngModel)]="selectedProfile.url" [disabled]="!editing" /></label><label>Identity provider URL<input [(ngModel)]="selectedProfile.idpUrl" [disabled]="!editing" /></label><label>Preferred SCA<input [(ngModel)]="selectedProfile.preferredApproach" [disabled]="!editing" /></label><label>Consent model<input [(ngModel)]="selectedProfile.supportedConsentType" [disabled]="!editing" /></label></div><p *ngIf="!selectedProfile" class="empty">This bank has no protocol profile attached yet.</p></div>
+      </section>
+      <ng-template #welcome><section class="panel detail empty-state"><span class="orb">↗</span><p class="eyebrow">READY</p><h2>Select a bank configuration</h2><p>Inspect connectivity, SCA preferences, consent capabilities, and activation status from one controlled workspace.</p></section></ng-template>
+    </section>
+  </ng-container>
+
+  <p *ngIf="notice" class="notice">{{ notice }}</p><p *ngIf="error" class="error">{{ error }}</p>
+</main>

@@ -81,6 +81,8 @@ The following picture displays the overall technical architecture concept of thi
  - [docker-compose-dev.yml](https://github.com/adorsys/open-banking-gateway/tree/develop/docker-compose-dev.yml) - docker-compose file in the project root for **Development** (requires building docker images)
  - [docker-compose.yml](https://github.com/adorsys/open-banking-gateway/tree/develop/docker-compose.yml) - docker-compose file in the project root for **Demo** (Images will be pulled from DockerHub)
  - [Production deployment guide](docs/production-deployment.md) - production profile, secret contract, container build, and release gates
+ - [Admin Console](admin-ui/README.md) - operator UI for bank and protocol configuration
+ - [Core-user portal](fintech-examples/fintech-ui/README.md) - bank search, consent, accounts, transactions, and payment flows
 
 ## Postman scripts to play with API 
 

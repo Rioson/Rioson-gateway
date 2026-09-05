@@ -42,6 +42,18 @@ services:
     networks:
       - opba-net
 
+  admin-ui:
+    restart: on-failure
+    build:
+      context: admin-ui
+      dockerfile: Dockerfile
+    ports:
+      - "24500:80"
+    depends_on:
+      - open-banking-gateway
+    networks:
+      - opba-net
+
   fintech-ui:
     environment:
       - BACKEND_URL=http://fintech-server:8086
